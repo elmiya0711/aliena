@@ -8,7 +8,7 @@ from colorama import Fore, init
 init(autoreset=True)
 
 def banner():
-    print(Fore.CYAN + '''
+    print(Fore.CYAN + r'''
   /$$$$$$  /$$       /$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ 
  /$$__  $$| $$      |_  $$_/| $$_____/| $$$ | $$ /$$__  $$
 | $$  \ $$| $$        | $$  | $$      | $$$$| $$| $$  \ $$
