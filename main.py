@@ -3,9 +3,22 @@ import random
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
 import threading
+from colorama import Fore, init
 
+‎init(autoreset=True)
 inf=1000000000000
 
+def banner():
+‎ print(Fore.CYAN + r''''
+‎
+‎
+‎.##...##..##..##....######..##.......####...##..##...####..
+‎.###.###...####.....##......##......##..##..###.##..##.....
+‎.##.#.##....##......####....##......######..##.###..##.###.
+‎.##...##....##......##......##......##..##..##..##..##..##.
+‎.##...##....##......######..######..##..##..##..##...####..
+‎...........................................................
+‎''')
 sn = [SoftwareName.CHROME.value]
 os = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
 rotator = UserAgent(software_names=sn, operating_systems=os, limit=inf)
